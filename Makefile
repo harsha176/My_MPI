@@ -1,6 +1,6 @@
 CC=gcc
-CFLAGS=-g 
-DFLAGS=-D DEBUG
+CFLAGS=-g -Wall
+DFLAGS=
 EXECUTABLE=rtt
 
 all:mympic.o mymsg.o

@@ -11,7 +11,7 @@
 #define NR_RTT_ITR 8
 #define MSG_START_EXP  3
 #define MSG_END_EXP 22
-#define DEBUG 1
+#define DEBUG 0
 
 int main(int argc, char *argv[])
 {
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
     //possible message sizes
     int msg_init_size = 1 << MSG_START_EXP;	//message intial size 8 bytes
-    int msg_step_size = 1 << 2;	//message step size 8 bytes
+    //int msg_step_size = 1 << 2;	//message step size 8 bytes
     int msg_last_size = 1 << MSG_END_EXP;	//message final size
     int nr_msgs = MSG_END_EXP - MSG_START_EXP + 1;	//number of different message sizes
 

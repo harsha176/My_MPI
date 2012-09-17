@@ -9,6 +9,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <time.h>   //for MPI_Wtime
+#include <sys/time.h>
 
 /*MPI Return values*/
 #define MPI_SUCCESS    0       //No error; MPI routine completed successfully    
@@ -35,7 +36,9 @@
 #define MPI_ANY_TAG    1
 
 static inline double MPI_Wtime() {
-  ((double)clock()/CLOCKS_PER_SEC);
+  struct timeval time_td;
+  gettimeofday(&time_td, 0);
+  return (double)(time_td.tv_sec + (1.0)*time_td.tv_usec/1000000);
 }
 
 /*Maximum size of processor name*/
@@ -56,16 +59,16 @@ typedef struct _MPI_Status MPI_Status;
 /*Context table definition*/
 struct context_table {
    int fd;             //connection file descriptor
-   unsigned int rank;  //rank of the other processor
    uint32_t address;   //ip address in host byte order 
    uint16_t port;      //port address in host byte order
 };
 
-/*MY MPI Comm*/
+/*My MPI Comm*/
 struct _MPI_Comm {
    unsigned int size;             //size of the communicator
    unsigned int rank;             //rank of the processor in communicator
    struct context_table* ctable;  //array of entries in context table
+                                  //index is determined by rank
 };
 
 
