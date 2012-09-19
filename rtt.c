@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
     //possible message sizes
     int msg_init_size = 1 << MSG_START_EXP;	//message intial size 8 bytes
-    //int msg_step_size = 1 << 2;	//message step size 8 bytes
+    //int msg_step_size = 1 << 2;       //message step size 8 bytes
     int msg_last_size = 1 << MSG_END_EXP;	//message final size
     int nr_msgs = MSG_END_EXP - MSG_START_EXP + 1;	//number of different message sizes
 
@@ -67,6 +67,7 @@ int main(int argc, char *argv[])
 		perror("Failed to send data to other nodes");
 		goto fail;
 	    }
+	    memset(buffer, 0, sizeof(char) * curr_msg_size);
 
 	    /*Send data to all process */
 	    int curr_node = 1;	//skip first node
@@ -155,12 +156,12 @@ int main(int argc, char *argv[])
 
 	    curr_msg_size *= 2;
 
-	    //free memory for stats
-	    //free(stats);
-
 	    //free buffer memory
-	    //free(buffer);
+	    free(buffer);
 	}			// end of sending messages to all nodes
+	//free memory for stats
+	free(stats);
+
     } else {
 	/*Non root process */
 	//Receive and send message

@@ -8,26 +8,26 @@
 #include "mympidatatype.h"
 #include <stdint.h>
 #include <stdbool.h>
-#include <time.h>   //for MPI_Wtime
+#include <time.h>		//for MPI_Wtime
 #include <sys/time.h>
 
 /*MPI Return values*/
-#define MPI_SUCCESS    0       //No error; MPI routine completed successfully    
-#define MPI_ERR_OTHER -1       //MPI_INIT initialization error
-#define MPI_ERR_COUNT -2       //Invalid count argument. Count arguments must be
+#define MPI_SUCCESS    0	//No error; MPI routine completed successfully
+#define MPI_ERR_OTHER -1	//MPI_INIT initialization error
+#define MPI_ERR_COUNT -2	//Invalid count argument. Count arguments must be
 			       //non-negative; a count of zero is often valid.
-#define MPI_ERR_TYPE  -3       //Invalid datatype argument. May be an 
-                               //uncommitted MPI_Datatype (see MPI_Type_commit).
-#define MPI_ERR_TAG   -4       //Invalid tag argument. Tags must be non-negative
-                               //; tags in a receive (MPI_Recv, MPI_Irecv,
-                               //MPI_Sendrecv, etc.) may also be MPI_ANY_TAG. 
-                               //The largest tag value is available through 
-                               //the the attribute MPI_TAG_UB
-#define MPI_ERR_RANK  -5       //Invalid source or destination rank. Ranks 
-                               //must be between zero and the size of the 
-                               //communicator minus one; ranks in a receive 
-                               //(MPI_Recv, MPI_Irecv, MPI_Sendrecv, etc.) 
-                               //may also be MPI_ANY_SOURCE.
+#define MPI_ERR_TYPE  -3	//Invalid datatype argument. May be an
+			       //uncommitted MPI_Datatype (see MPI_Type_commit).
+#define MPI_ERR_TAG   -4	//Invalid tag argument. Tags must be non-negative
+			       //; tags in a receive (MPI_Recv, MPI_Irecv,
+			       //MPI_Sendrecv, etc.) may also be MPI_ANY_TAG. 
+			       //The largest tag value is available through 
+			       //the the attribute MPI_TAG_UB
+#define MPI_ERR_RANK  -5	//Invalid source or destination rank. Ranks
+			       //must be between zero and the size of the 
+			       //communicator minus one; ranks in a receive 
+			       //(MPI_Recv, MPI_Irecv, MPI_Sendrecv, etc.) 
+			       //may also be MPI_ANY_SOURCE.
 
 
 
@@ -35,10 +35,11 @@
 #define MPI_ANY_SOURCE 0
 #define MPI_ANY_TAG    1
 
-static inline double MPI_Wtime() {
-  struct timeval time_td;
-  gettimeofday(&time_td, 0);
-  return (double)(time_td.tv_sec + (1.0)*time_td.tv_usec/1000000);
+static inline double MPI_Wtime()
+{
+    struct timeval time_td;
+    gettimeofday(&time_td, 0);
+    return (double) (time_td.tv_sec + (1.0) * time_td.tv_usec / 1000000);
 }
 
 /*Maximum size of processor name*/
@@ -50,25 +51,25 @@ typedef int MPI_Comm;
 
 /*Status definition*/
 struct _MPI_Status {
-   int MPI_SOURCE;   //Source of the message
-   int length;	     //length of message received so far
+    int MPI_SOURCE;		//Source of the message
+    int length;			//length of message received so far
 };
 
 typedef struct _MPI_Status MPI_Status;
 
 /*Context table definition*/
 struct context_table {
-   int fd;             //connection file descriptor
-   uint32_t address;   //ip address in host byte order 
-   uint16_t port;      //port address in host byte order
+    int fd;			//connection file descriptor
+    uint32_t address;		//ip address in host byte order 
+    uint16_t port;		//port address in host byte order
 };
 
 /*My MPI Comm*/
 struct _MPI_Comm {
-   unsigned int size;             //size of the communicator
-   unsigned int rank;             //rank of the processor in communicator
-   struct context_table* ctable;  //array of entries in context table
-                                  //index is determined by rank
+    unsigned int size;		//size of the communicator
+    unsigned int rank;		//rank of the processor in communicator
+    struct context_table *ctable;	//array of entries in context table
+    //index is determined by rank
 };
 
 
@@ -84,7 +85,7 @@ struct _MPI_Comm {
  * 	MPI_SUCCESS on succesfull initialization of MPI Library
  * 	MPI_ERR_OTHER if library is already initialized.	
  */
-int MPI_Init(int * /*argc*/, char *** /*argv*/);
+int MPI_Init(int * /*argc */ , char *** /*argv */ );
 
 /**
  * Determines the size of the group associated with a communicator.
@@ -97,7 +98,7 @@ int MPI_Init(int * /*argc*/, char *** /*argv*/);
  * Return value
  * 	MPI_SUCCESS	
  */
-int MPI_Comm_size(MPI_Comm /*handle*/, int * /*size*/);
+int MPI_Comm_size(MPI_Comm /*handle */ , int * /*size */ );
 
 /**
  * Determines the rank of the calling process in the communicator.
@@ -107,7 +108,7 @@ int MPI_Comm_size(MPI_Comm /*handle*/, int * /*size*/);
  * Output parameters
  * rank: Rank of the calling process in the group of comm (integer)	
  */
-int MPI_Comm_rank(MPI_Comm /*handle*/, int * /*rank*/);
+int MPI_Comm_rank(MPI_Comm /*handle */ , int * /*rank */ );
 
 /**
  * Gets the name of the processor
@@ -130,8 +131,9 @@ int MPI_Get_processor_name(char *, int *);
  *  comm:  communicator (handle)
  *
  */
-int MPI_Send(void* /*buff*/, int /*count*/, MPI_Datatype /*datatype*/, 
-             int /*rank*/, int /*tag*/, MPI_Comm /*comm*/);
+int MPI_Send(void * /*buff */ , int /*count */ ,
+	     MPI_Datatype /*datatype */ ,
+	     int /*rank */ , int /*tag */ , MPI_Comm /*comm */ );
 
 /**
  * Blocking receive for a message
@@ -147,9 +149,10 @@ int MPI_Send(void* /*buff*/, int /*count*/, MPI_Datatype /*datatype*/,
  * buf initial address of receive buffer (choice)
  * status status object (Status)
  */
-int MPI_Recv(void* /*buff*/, int /*count*/, MPI_Datatype /*datatype*/, 
-             int /*rank*/, int /*tag*/, MPI_Comm /*comm*/, 
-             MPI_Status * /*status*/);
+int MPI_Recv(void * /*buff */ , int /*count */ ,
+	     MPI_Datatype /*datatype */ ,
+	     int /*rank */ , int /*tag */ , MPI_Comm /*comm */ ,
+	     MPI_Status * /*status */ );
 
 /**
  * Gets the number of "top level" elements
@@ -169,7 +172,8 @@ int MPI_Recv(void* /*buff*/, int /*count*/, MPI_Datatype /*datatype*/,
  * MPI_ERR_TYPE  Invalid datatype argument. May be an uncommitted MPI_Datatype (see MPI_Type_commit).
  *
  */
-int MPI_Get_count(MPI_Status * /*status*/, MPI_Datatype /*datatype*/, int * /*count*/);
+int MPI_Get_count(MPI_Status * /*status */ , MPI_Datatype /*datatype */ ,
+		  int * /*count */ );
 
 /**
  * Terminates MPI execution environment

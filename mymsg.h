@@ -17,10 +17,10 @@
 #define MSG_INVALID_MSG      -6
 
 /*Message types*/
-#define MSG_INIT    1 //Initialization message
-#define MSG_DATA    2 //Data message
+#define MSG_INIT    1		//Initialization message
+#define MSG_DATA    2		//Data message
 
-extern char* mympi_types[];
+extern char *mympi_types[];
 
 /**
  * For each message type update the union in msg_t and define offsets and sizes
@@ -28,33 +28,33 @@ extern char* mympi_types[];
  */
 /*Initialization message header*/
 struct init_hdr {
-   uint32_t rank;       /*rank of the processor*/
-   uint32_t address;    /*Internet address*/
-   uint16_t port;       /*port number of listening server of the processor*/
-   uint16_t padding;    /*padding*/
+    uint32_t rank;		/*rank of the processor */
+    uint32_t address;		/*Internet address */
+    uint16_t port;		/*port number of listening server of the processor */
+    uint16_t padding;		/*padding */
 };
 
 /*Data message header*/
 struct data_hdr {
-   uint32_t tag;        /*tag*/
-   uint32_t padding;    /*padding*/
-   uint32_t datatype;   /*Data type of the message*/
+    uint32_t tag;		/*tag */
+    uint32_t padding;		/*padding */
+    uint32_t datatype;		/*Data type of the message */
 };
 
 
 /*Message format*/
 struct __msg_t {
-   uint32_t length;    /*payload length of the message*/
-   uint32_t type;      /*type of the message to be exchanged*/
-   /*
-    * specific headers for each message type
-    * each header is of constant size 12 bytes
-    */  
-   union {
-      struct init_hdr init;  /*initialization message header*/
-      struct data_hdr data;  /*data message header*/
-   };
-   char payload[0];   
+    uint32_t length;		/*payload length of the message */
+    uint32_t type;		/*type of the message to be exchanged */
+    /*
+     * specific headers for each message type
+     * each header is of constant size 12 bytes
+     */
+    union {
+	struct init_hdr init;	/*initialization message header */
+	struct data_hdr data;	/*data message header */
+    };
+    char payload[0];
 };
 
 typedef struct __msg_t msg_t;
@@ -89,7 +89,7 @@ typedef struct __msg_t msg_t;
 
 /*Data header offsets*/
 #define DATA_HDR_TAG_OFFSET       OFFSETOF(msg_t, data.tag)
-#define DATA_HDR_DATATYPE_OFFSET  OFFSETOF(msg_t, data.datatype) 
+#define DATA_HDR_DATATYPE_OFFSET  OFFSETOF(msg_t, data.datatype)
 #define DATA_PAYLOAD_OFFSET       OFFSETOF(msg_t, payload)
 
 /*Calculate message size from length of payload*/
@@ -106,7 +106,7 @@ typedef struct __msg_t msg_t;
  *   MSG_SUCCESS on successful creation of message
  *   MSG_ERROR   on error 
  */
-int create_init_msg(int /*rank*/, int /*port*/, msg_t** /*msg*/);
+int create_init_msg(int /*rank */ , int /*port */ , msg_t ** /*msg */ );
 
 /*
  * This function creates data message.
@@ -121,8 +121,9 @@ int create_init_msg(int /*rank*/, int /*port*/, msg_t** /*msg*/);
  *     MSG_SUCCESS on successful creation of message 
  *     MSG_ERROR   on error message
  */
-int create_data_msg(MPI_Datatype /*datatype*/, unsigned int /*tag*/, 
-                    void* /*buffer*/, int /*length*/, msg_t** /*msg*/);
+int create_data_msg(MPI_Datatype /*datatype */ , unsigned int /*tag */ ,
+		    void * /*buffer */ , int /*length */ ,
+		    msg_t ** /*msg */ );
 
 /*
  * This function parses message. 
@@ -135,21 +136,49 @@ int create_data_msg(MPI_Datatype /*datatype*/, unsigned int /*tag*/,
  * 	MSG_SUCCESS on successful parsing of the buffer data
  * 	MSG_PARSE_ERROR on failure
  */
-int parse_msg(void* /*buffer*/, unsigned int /*length*/, msg_t** /*msg*/);
+int parse_msg(void * /*buffer */ , unsigned int /*length */ ,
+	      msg_t ** /*msg */ );
+
+
+/**
+ * This function sends message object over descriptor.
+ *
+ * Input parameters
+ * 	fd   descriptor to write message to
+ *      pMsg message object to be sent
+ * Return value
+ * 	returns MSG_SUCCESS of successful receive 
+ * 	or MSG_ERROR in case of failure.
+ */
+int send_msg(int /*fd */ , msg_t * /*pMsg */ );
+
+/**
+ * This function reads message object from descriptor
+ * and returns message object.
+ *
+ * Input parameters
+ * 	fd   descriptor to read message from
+ * Output parameters
+ * 	pMsg message object
+ * Return value
+ * 	returns MSG_SUCCESS on succssesful receive
+ * 	or MSG_ERROR in case of failure.
+ */
+int read_msg(int /*fd */ , msg_t ** /*pMsg */ );
 
 /**
  * This is an utility function to prints message header.
  */
-void print_msg_hdr(msg_t* msg);
+void print_msg_hdr(msg_t * msg);
 
 /*
  * This function free's data for init message.
  */
-void free_init_msg(msg_t* /*msg*/);
+void free_init_msg(msg_t * /*msg */ );
 
 /*
  * This function free's data for data message.
  */
-void free_data_msg(msg_t* /*msg*/);
+void free_data_msg(msg_t * /*msg */ );
 
 #endif

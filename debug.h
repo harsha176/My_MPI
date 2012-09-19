@@ -3,10 +3,10 @@
 
 #include <stdio.h>
 
-#ifdef DEBUG
-  #define dprintf(...)   (void)fprintf(stderr, __VA_ARGS__)
+#ifdef DEBUG_LIB
+#define dprintf(...)   (void)fprintf(stderr, __VA_ARGS__)
 #else
-  #define dprintf(...)    
+#define dprintf(...)
 #endif
 
 #endif
